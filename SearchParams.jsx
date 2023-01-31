@@ -1,5 +1,11 @@
 //search api
-import { useState } from "react";
+//effect is something that happens outside of your component
+//ex)
+//      location, animal, breed when user clicks submit
+//      it goes out to the api and gets a new list of pets so user can see what they searched for
+
+import { useState, useEffect } from "react";
+import Pet from "./Pet";
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -14,7 +20,23 @@ const SearchParams = () => {
   const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
+  const [pets, setPets] = useState([]);
   const breeds = [];
+
+  //request once in the beginning and never again
+  useEffect(() => {
+    requestPets();
+  }, []); //eslint-disable-line react-hookos/exhaustive-deps
+
+  async function requestPets() {
+    const res = await fetch(
+      `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
+    );
+    const json = await res.json();
+
+    setPets(json.pets);
+  }
+
   return (
     //first label is location selection
     //second label is animal selection (what kind of animal )
@@ -23,7 +45,12 @@ const SearchParams = () => {
     //gives a react array
 
     <div className="search-params">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          requestPets();
+        }}
+      >
         <label htmlFor="location">
           Location
           <input
@@ -74,6 +101,15 @@ const SearchParams = () => {
 
         <button>Submit</button>
       </form>
+
+      {pets.map((pet) => (
+        <Pet
+          name={pet.name}
+          animal={pet.animal}
+          breed={pet.breed}
+          key={pet.id}
+        />
+      ))}
     </div>
   );
 };
