@@ -1,5 +1,6 @@
 //search api
 import { useState } from "react";
+const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
   //searches pet in Los Angeles
@@ -11,7 +12,16 @@ const SearchParams = () => {
   */
 
   const [location, setLocation] = useState("");
+  const [animal, setAnimal] = useState("");
+  const [breed, setBreed] = useState("");
+  const breeds = [];
   return (
+    //first label is location selection
+    //second label is animal selection (what kind of animal )
+    //third label is breed selection
+    //map does for every animals reference, it returns an option of each of those
+    //gives a react array
+
     <div className="search-params">
       <form>
         <label htmlFor="location">
@@ -24,6 +34,44 @@ const SearchParams = () => {
             placeholder="Location"
           />
         </label>
+
+        <label htmlFor="animal">
+          Animal
+          <select
+            id="animal"
+            value={animal}
+            onChange={(e) => {
+              setAnimal(e.target.value);
+
+              //each time new animal is selected
+              //it resets the breed
+              setBreed("");
+            }}
+          >
+            <option />
+            {ANIMALS.map((animal) => (
+              <option key={animal}>{animal}</option>
+            ))}
+          </select>
+        </label>
+
+        <label htmlFor="breed">
+          Breed
+          <select
+            id="breed"
+            disabled={breeds.length === 0}
+            value={breed}
+            onChange={(e) => {
+              setBreed(e.target.value);
+            }}
+          >
+            <option />
+            {breeds.map((breed) => (
+              <option key={breed}>{breed}</option>
+            ))}
+          </select>
+        </label>
+
         <button>Submit</button>
       </form>
     </div>
