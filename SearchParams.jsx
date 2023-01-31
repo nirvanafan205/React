@@ -5,7 +5,7 @@
 //      it goes out to the api and gets a new list of pets so user can see what they searched for
 
 import { useState, useEffect } from "react";
-import Pet from "./Pet";
+import Results from "./Result";
 import useBreedList from "./useBreedList";
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
@@ -46,6 +46,7 @@ const SearchParams = () => {
     <div className="search-params">
       {/*controlled form*/}
       <form
+        //react dom effect
         onSubmit={(e) => {
           e.preventDefault();
           requestPets();
@@ -106,15 +107,7 @@ const SearchParams = () => {
         <button>Submit</button>
       </form>
 
-      {/** map does for every animals reference, it returns an option of each of those*/}
-      {pets.map((pet) => (
-        <Pet
-          name={pet.name}
-          animal={pet.animal}
-          breed={pet.breed}
-          key={pet.id}
-        />
-      ))}
+      <Results pets={pets} />
     </div>
   );
 };
