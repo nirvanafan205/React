@@ -6,6 +6,7 @@
 
 import { useState, useEffect } from "react";
 import Pet from "./Pet";
+import useBreedList from "./useBreedList";
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -21,7 +22,9 @@ const SearchParams = () => {
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
   const [pets, setPets] = useState([]);
-  const breeds = [];
+
+  //corresponds to animals appropriate breed list
+  const [breeds] = useBreedList(animal);
 
   //request once in the beginning and never again
   useEffect(() => {
@@ -38,19 +41,18 @@ const SearchParams = () => {
   }
 
   return (
-    //first label is location selection
-    //second label is animal selection (what kind of animal )
-    //third label is breed selection
-    //map does for every animals reference, it returns an option of each of those
     //gives a react array
 
     <div className="search-params">
+      {/*controlled form*/}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           requestPets();
         }}
       >
+        {/*first label is location selection*/}
+
         <label htmlFor="location">
           Location
           <input
@@ -62,6 +64,7 @@ const SearchParams = () => {
           />
         </label>
 
+        {/**second label is animal selection (what kind of animal )*/}
         <label htmlFor="animal">
           Animal
           <select
@@ -82,6 +85,7 @@ const SearchParams = () => {
           </select>
         </label>
 
+        {/**third label is breed selection*/}
         <label htmlFor="breed">
           Breed
           <select
@@ -102,6 +106,7 @@ const SearchParams = () => {
         <button>Submit</button>
       </form>
 
+      {/** map does for every animals reference, it returns an option of each of those*/}
       {pets.map((pet) => (
         <Pet
           name={pet.name}
